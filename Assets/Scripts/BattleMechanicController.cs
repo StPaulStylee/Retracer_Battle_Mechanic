@@ -2,41 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
+[RequireComponent(typeof(BoxCollider2D))]
 public class BattleMechanicController : MonoBehaviour {
-  private LineRenderer lineRenderer;
-  [SerializeField]
-  private int points;
-  [SerializeField]
-  private float amplitude = 1f;
-  [SerializeField]
-  private float frequency = 0.25f;
-  [SerializeField]
-  private Vector2 xLimit = new Vector2(8, -8);
-  [SerializeField]
-  private float movementSpeed = 1f;
-  private void Awake() {
-    lineRenderer = GetComponent<LineRenderer>();
-  }
-  void Start() {
+  public GameObject TracingCirclePrefab;
+  private GameObject tracingCircle;
+  private Bounds bounds;
 
+  private void Awake() {
+    bounds = GetComponent<BoxCollider2D>().bounds;
+  }
+  // Start is called before the first frame update
+  void Start() {
+    tracingCircle = GameObject.FindGameObjectWithTag("TracingCircle");
+    if (tracingCircle == null) {
+      Debug.Log("INSTANTIATING!");
+      tracingCircle = InstantiateTracingCircle();
+      return;
+    }
+    SetTracingCirclePosition(ref tracingCircle);
+    Debug.Log("FOUND!");
   }
 
   // Update is called once per frame
   void Update() {
-    Draw();
+
   }
 
-  private void Draw() {
-    float tau = 2 * Mathf.PI;
-    float xStart = xLimit.x;
-    float xFinish = xLimit.y;
-    lineRenderer.positionCount = points;
-    for (int i = 0; i < points; i++) {
-      float progess = (float)i / (points - 1);
-      float x = Mathf.Lerp(xStart, xFinish, progess);
-      float y = amplitude * Mathf.Sin(tau * frequency * x + Time.timeSinceLevelLoad * movementSpeed);
-      lineRenderer.SetPosition(i, new Vector3(x, y, 0));
-    }
+  private GameObject InstantiateTracingCircle() {
+    GameObject tracingCircle = Instantiate(TracingCirclePrefab);
+    SetTracingCirclePosition(ref tracingCircle);
+    return tracingCircle;
+  }
+
+  private void SetTracingCirclePosition(ref GameObject tracingCircle) {
+    // Still need to accound for the radius of the circle
+    TracingCircleController circleCtrl = tracingCircle.GetComponent<TracingCircleController>();
+    tracingCircle.transform.position = new Vector3(-bounds.extents.x + circleCtrl.CircleCollider.radius, bounds.center.y, 0);
   }
 }

@@ -9,12 +9,12 @@ public class DrawLine : MonoBehaviour {
   private GameObject linePrefab;
   private GameObject currentLine;
   [SerializeField]
-  private LineIntersectCalculator lineIntersectCalculator;
+  //private LineIntersectCalculator lineIntersectCalculator;
   void Start() {
-    lineIntersectCalculator = FindObjectOfType<LineIntersectCalculator>();
-    if (lineIntersectCalculator == null) {
-      Debug.LogError("A LineIntersectCalculator must be available in scene!");
-    }
+    //lineIntersectCalculator = FindObjectOfType<LineIntersectCalculator>();
+    //if (lineIntersectCalculator == null) {
+    //  Debug.LogError("A LineIntersectCalculator must be available in scene!");
+    //}
   }
 
   // Update is called once per frame
@@ -29,7 +29,7 @@ public class DrawLine : MonoBehaviour {
 
   private void FinishLine() {
     StopCoroutine(drawing);
-    lineIntersectCalculator.DrawnLine = null;
+    //lineIntersectCalculator.DrawnLine = null;
   }
 
   private void StartLine() {
@@ -42,7 +42,7 @@ public class DrawLine : MonoBehaviour {
   private IEnumerator Draw() {
     currentLine = Instantiate(linePrefab);
     LineRenderer lineRenderer = currentLine.GetComponent<LineRenderer>();
-    lineIntersectCalculator.DrawnLine = lineRenderer;
+    //lineIntersectCalculator.DrawnLine = lineRenderer;
     if (lineRenderer == null) {
       Debug.LogError($"No line renderer component in {currentLine.name}");
     }
