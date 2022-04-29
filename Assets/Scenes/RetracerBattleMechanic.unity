@@ -410,6 +410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TracingCirclePrefab: {fileID: 5555515964481270340, guid: 218f0c2d8f62b4b4a96094b096498fc1, type: 3}
+  interpolationFramesCount: 1500
 --- !u!1 &1321129846
 GameObject:
   m_ObjectHideFlags: 0
