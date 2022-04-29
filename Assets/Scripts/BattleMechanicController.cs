@@ -27,6 +27,7 @@ public class BattleMechanicController : MonoBehaviour {
   }
 
   void Update() {
+    rightBound.y = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
     float interpolationRatio = (float)elapsedFrames / interpolationFramesCount;
     Vector3 interpolatedPosition = Vector3.Lerp(leftBound, rightBound, interpolationRatio);
     elapsedFrames = (elapsedFrames + 1) % (interpolationFramesCount + 1);
