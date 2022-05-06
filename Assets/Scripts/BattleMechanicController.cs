@@ -28,11 +28,13 @@ public class BattleMechanicController : MonoBehaviour {
 
   void Update() {
     rightBound.y = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
+    leftBound.y = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
     float interpolationRatio = (float)elapsedFrames / interpolationFramesCount;
     Vector3 interpolatedPosition = Vector3.Lerp(leftBound, rightBound, interpolationRatio);
     elapsedFrames = (elapsedFrames + 1) % (interpolationFramesCount + 1);
     tracingCircle.transform.position = interpolatedPosition;
-
+    //Debug.Log($"{elapsedFrames}/{interpolationFramesCount}");
+    //Debug.Log(interpolationRatio);
   }
 
   private GameObject InstantiateTracingCircle() {
