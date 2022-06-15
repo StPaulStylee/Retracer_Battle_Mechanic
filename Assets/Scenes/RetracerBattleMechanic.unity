@@ -815,7 +815,7 @@ MonoBehaviour:
   amplitude: 1
   frequency: 0.25
   xLimit: {x: -6, y: 6}
-  movementSpeed: 0
+  movementSpeed: 1
   collisionPadding: 3
 --- !u!120 &1321129848
 LineRenderer:

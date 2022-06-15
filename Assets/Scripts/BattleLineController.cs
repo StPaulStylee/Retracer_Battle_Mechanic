@@ -71,6 +71,7 @@ public class BattleLineController : MonoBehaviour {
     for (int i = 0; i < points; i++) {
       float progess = (float)i / (points - 1);
       float x = Mathf.Lerp(xStart, xFinish, progess);
+      // Confirm if this movementSpeed is necessary. I don't think it is doing anything since the line is static (not-moving)
       float y = amplitude * Mathf.Sin(tau * frequency * x + Time.timeSinceLevelLoad * movementSpeed);
       // Consider using SetPositions here for a performance improvement
       lineRenderer.SetPosition(i, new Vector3(x, y, 0));

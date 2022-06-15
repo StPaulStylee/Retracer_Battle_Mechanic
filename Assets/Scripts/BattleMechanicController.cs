@@ -4,29 +4,32 @@ using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class BattleMechanicController : MonoBehaviour {
-  public GameObject TracingCirclePrefab;
-  public int interpolationFramesCount = 120;
-
-  private int elapsedFrames;
+  [Tooltip("TracingCircle")]
+  public GameObject TracingCirclePrefab; // This should be private?
+  private TracingCircleController tracingCircleController;
   private GameObject tracingCircle;
+
+  [Tooltip("Circle/Tracing Speed")]
+  public int interpolationFramesCount = 120;
+  private int elapsedFrames;
+
   private Bounds bounds;
   private Vector3 leftBound, rightBound;
 
   private void Awake() {
+    if (TracingCirclePrefab == null) {
+      Debug.LogError($"No TracingCirclePrefab assigned to {this.name}");
+    }
     bounds = GetComponent<BoxCollider2D>().bounds;
     leftBound = new Vector3(bounds.min.x, 0 , 0);
     rightBound = new Vector3(bounds.max.x, 0, 0);
   }
   void Start() {
-    tracingCircle = GameObject.FindGameObjectWithTag("TracingCircle");
-    if (tracingCircle == null) {
-      tracingCircle = InstantiateTracingCircle();
-      return;
-    }
-    SetTracingCirclePosition(tracingCircle);
+    SetTracingCircleOnStart();
   }
 
   void Update() {
+    // What am I doing here with these bounds?
     rightBound.y = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
     leftBound.y = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
     float interpolationRatio = (float)elapsedFrames / interpolationFramesCount;
@@ -37,14 +40,15 @@ public class BattleMechanicController : MonoBehaviour {
     //Debug.Log(interpolationRatio);
   }
 
-  private GameObject InstantiateTracingCircle() {
-    GameObject tracingCircle = Instantiate(TracingCirclePrefab);
-    SetTracingCirclePosition(tracingCircle);
-    return tracingCircle;
-  }
-
-  private void SetTracingCirclePosition(GameObject tracingCircle) {
-    TracingCircleController circleCtrl = tracingCircle.GetComponent<TracingCircleController>();
-    tracingCircle.transform.position = new Vector3(leftBound.x + circleCtrl.CircleCollider.radius, 0, 0);
+  private void SetTracingCircleOnStart() {
+    tracingCircle = GameObject.FindGameObjectWithTag("TracingCircle");
+    if (tracingCircle == null) {
+      tracingCircle = Instantiate(TracingCirclePrefab);
+      tracingCircleController = tracingCircle.GetComponent<TracingCircleController>();
+      tracingCircleController.SetStartingPosition(leftBound.x);
+      return;
+    }
+    tracingCircleController = tracingCircle.GetComponent<TracingCircleController>();
+    tracingCircleController.SetStartingPosition(leftBound.x);
   }
 }
